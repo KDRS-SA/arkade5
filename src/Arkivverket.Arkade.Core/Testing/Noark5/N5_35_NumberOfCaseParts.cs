@@ -8,28 +8,18 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_35_NumberOfCaseParts : Noark5XmlReaderBaseTest
     {
-        private string _currentArchivePartSystemId;
-        private int _totalNumberOfCaseParts;
-        private Archive archive;
-        private readonly Dictionary<string, int> _casePartsPerArchivePart = new Dictionary<string, int>();
         private readonly TestId _id;
 
-        private string GetTestVersion()
-        {
-            string standardVersion = archive.Details.ArchiveStandard;
-
-            if (standardVersion.Equals("5.5"))
-            {
-                return "5.5";
-            }
-
-            return standardVersion;
-        }
+        private readonly string _archiveStandard;
+        private string _currentArchivePartSystemId;
+        private int _totalNumberOfCaseParts;
+        private readonly Dictionary<string, int> _casePartsPerArchivePart = new Dictionary<string, int>();
 
         public N5_35_NumberOfCaseParts(Archive archive)
         {
-            this.archive = archive;
-            _id = new TestId(TestId.TestKind.Noark5, 35, GetTestVersion());
+            _archiveStandard = archive.Details.ArchiveStandard;
+
+            _id = new TestId(TestId.TestKind.Noark5, 35, _archiveStandard);
         }
 
         public override TestId GetId()
@@ -50,19 +40,11 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
                     string.Format(Noark5Messages.TotalResultNumber, _totalNumberOfCaseParts.ToString()))
             };
 
-            if (_casePartsPerArchivePart.Count > 1)
+            foreach (KeyValuePair<string, int> casePartCount in _casePartsPerArchivePart)
             {
-                foreach (KeyValuePair<string, int> casePartCount in _casePartsPerArchivePart)
-                {
-                    if (casePartCount.Value > 0)
-                    {
-                        var testResult = new TestResult(ResultType.Success, new Location(string.Empty),
-                            string.Format(Noark5Messages.NumberOf_PerArchivePart, casePartCount.Key,
-                                casePartCount.Value));
-
-                        testResults.Add(testResult);
-                    }
-                }
+                if (casePartCount.Value > 0)
+                    testResults.Add(new TestResult(ResultType.Success, new Location(string.Empty),
+                        string.Format(Noark5Messages.NumberOf_PerArchivePart, casePartCount.Key, casePartCount.Value)));
             }
 
             return testResults;
@@ -88,39 +70,22 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 
         protected override void ReadEndElementEvent(object sender, ReadElementEventArgs eventArgs)
         {
-            if (archive.Details.ArchiveStandard.Equals("5.5"))
-            {
-                CountPartsForVersion5_5(eventArgs);
-            }
-
-            CountCaseParts(eventArgs);
+            if (IsCasePart(eventArgs))
+                Count();
         }
 
-        private void CountPartsForVersion5_5(ReadElementEventArgs eventArgs)
+        private bool IsCasePart(ReadElementEventArgs eventArgs)
         {
-            if (eventArgs.NameEquals("part"))
-            {
-                Count();
-            }
-        }
-
-        private void CountCaseParts(ReadElementEventArgs eventArgs)
-        {
-            if (eventArgs.NameEquals("sakspart"))
-            {
-                Count();
-            }
+            return eventArgs.NameEquals("sakspart")
+                   || _archiveStandard.Equals("5.5") && eventArgs.NameEquals("part");
         }
 
         private void Count()
         {
             _totalNumberOfCaseParts++;
 
-            if (_casePartsPerArchivePart.Count > 0)
-            {
-                if (_casePartsPerArchivePart.ContainsKey(_currentArchivePartSystemId))
-                    _casePartsPerArchivePart[_currentArchivePartSystemId]++;
-            }
+            if (_casePartsPerArchivePart.ContainsKey(_currentArchivePartSystemId))
+                _casePartsPerArchivePart[_currentArchivePartSystemId]++;
         }
     }
 }
