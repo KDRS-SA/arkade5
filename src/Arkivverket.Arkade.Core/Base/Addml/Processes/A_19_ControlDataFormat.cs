@@ -10,7 +10,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_19_ControlDataFormat : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 19);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 19);
 
         public const string Name = "Control_DataFormat";
         private const int NumberOfShownErrors = 6;

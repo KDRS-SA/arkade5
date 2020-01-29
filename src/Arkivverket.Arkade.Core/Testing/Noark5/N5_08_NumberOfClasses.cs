@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_08_NumberOfClasses : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 8);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 8);
 
         private ArchivePart _currentArchivePart = new ArchivePart();
         private readonly List<ClassificationSystem> _classificationSystems = new List<ClassificationSystem>();

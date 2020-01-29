@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_20_ControlNotNull : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 20);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 20);
 
         public const string Name = "Control_NotNull";
 

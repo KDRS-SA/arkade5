@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_15_ControlKey : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 15);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 15);
 
         public const string Name = "Control_Key";
 

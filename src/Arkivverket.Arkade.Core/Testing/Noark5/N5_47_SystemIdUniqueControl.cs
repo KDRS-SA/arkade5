@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_47_SystemIdUniqueControl : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 47);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 47);
 
         private readonly SortedDictionary<string, int> _systemIdInstances = new SortedDictionary<string, int>();
 

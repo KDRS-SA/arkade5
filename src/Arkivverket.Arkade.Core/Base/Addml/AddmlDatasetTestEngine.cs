@@ -114,5 +114,10 @@ namespace Arkivverket.Arkade.Core.Base.Addml
 
             return testSuite;
         }
+
+        public TestSuite RunTestsOnArchive(TestSession testSession, List<uint> testsToDo)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_63_ControlElementsHasContent : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 63);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 63);
 
         private readonly List<TestResult> _testResults = new List<TestResult>();
         private bool _elementHasContent;

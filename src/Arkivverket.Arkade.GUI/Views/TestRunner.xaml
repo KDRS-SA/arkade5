@@ -57,6 +57,20 @@
             <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding CurrentlyProcessingFile}"></TextBlock>
             <TextBlock Grid.Row="4" Grid.Column="1" Margin="5" Text="{Binding NumberOfProcessedFiles}" Visibility="{Binding AddmlFlatFileStatusVisibility}"></TextBlock>
             <TextBlock Grid.Row="5" Grid.Column="1" Margin="5" Text="{Binding NumberOfProcessedRecords}"></TextBlock>
+            <Expander Header="Testpunkter" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5" Visibility="{Binding AddmlDataObjectStatusVisibility}">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox IsChecked="{Binding AllOrNothingSelected}" Content="Alle testpunkter"/>
+                    <ScrollViewer Height="150">
+                        <ListBox ItemsSource="{Binding Path=SelectableTests}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Path=Checked}" Content="{Binding Path=Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
+            </Expander>
 
             <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
                 <Button Margin="20" HorizontalAlignment="Left" Content="Start testing"  Width="130" Height="30" Command="{Binding StartTestingCommand}"/>

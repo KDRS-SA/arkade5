@@ -10,7 +10,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
     /// <inheritdoc />
     public class N5_40_NumberOfDepreciations : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 40);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 40);
 
         private int _totalNumberOfDeprecations;
         private readonly List<N5_40_ArchivePart> _archiveParts = new List<N5_40_ArchivePart>();

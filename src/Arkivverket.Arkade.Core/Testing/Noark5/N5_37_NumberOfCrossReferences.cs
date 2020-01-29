@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_37_NumberOfCrossReferences : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 37);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 37);
 
         private N5_37_ArchivePart _currentArchivePart;
         private readonly List<N5_37_ArchivePart> _archiveParts = new List<N5_37_ArchivePart>();

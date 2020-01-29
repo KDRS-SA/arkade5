@@ -38,10 +38,73 @@ namespace Arkivverket.Arkade.Core.Base.Noark5
             return testSuite;
         }
 
+        public TestSuite RunTestsOnArchive(TestSession testSession, List<uint> testsToDo)
+        {
+            List<IArkadeStructureTest> structureTests = RunStructureTests(testSession.Archive, testsToDo);
+
+            List<INoark5Test> contentTests = RunContentTests(testSession.Archive, testsToDo);
+
+            var testSuite = new TestSuite();
+            AddTestToTestSuite(contentTests, testSuite);
+            AddTestToTestSuite(structureTests, testSuite);
+            return testSuite;
+        }
+
         private static void AddTestToTestSuite(IEnumerable<IArkadeTest> tests, TestSuite testSuite)
         {
             foreach (var test in tests)
                 testSuite.AddTestRun(test.GetTestRun());
+        }
+
+        private List<INoark5Test> RunContentTests(Archive archive, List<uint> testsToDo)
+        {
+            List<INoark5Test> contentTests = _testProvider.GetContentTests(archive, testsToDo);
+
+            if (contentTests.Count == 0)
+                return contentTests;
+
+            SubscribeTestsToReadElementEvent(contentTests);
+
+            ArchiveXmlFile archiveStructureFile = archive.GetArchiveXmlFile(ArkadeConstants.ArkivstrukturXmlFileName);
+
+            using (var reader = XmlReader.Create(archiveStructureFile.AsStream()))
+            {
+                RaiseEventStartParsingFile();
+
+                var path = new Stack<string>();
+
+                while (ReadNextNode(reader))
+                {
+                    if (reader.IsEmptyElement)
+                        continue;
+
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            path.Push(reader.LocalName);
+                            RaiseReadStartElementEvent(CreateReadElementEventArgs(reader, path));
+                            break;
+                        case XmlNodeType.Attribute:
+                            RaiseReadAttributeEvent(CreateReadElementEventArgs(reader, path));
+                            break;
+                        case XmlNodeType.Text:
+                            RaiseReadElementValueEvent(CreateReadElementEventArgs(reader, path));
+                            break;
+                        case XmlNodeType.EndElement:
+                            RaiseReadEndElementEvent(CreateReadElementEventArgs(reader, path));
+                            path.Pop();
+                            _statusEventHandler.RaiseEventRecordProcessingStopped();
+                            break;
+                        case XmlNodeType.XmlDeclaration:
+                        case XmlNodeType.ProcessingInstruction:
+                        case XmlNodeType.Comment:
+                        case XmlNodeType.Whitespace:
+                            break;
+                    }
+                }
+                RaiseEventFinishedParsingFile();
+            }
+            return contentTests;
         }
 
         private List<INoark5Test> RunContentTests(Archive archive)
@@ -97,9 +160,48 @@ namespace Arkivverket.Arkade.Core.Base.Noark5
             return reader.MoveToNextAttribute() || reader.Read();
         }
 
+        private List<IArkadeStructureTest> RunStructureTests(Archive archive, List<uint> testsToDo)
+        {
+            List<IArkadeStructureTest> structureTests = _testProvider.GetStructureTests(testsToDo);
+
+            if (structureTests.Count == 0)
+                return structureTests;
+
+            foreach (var test in structureTests)
+            {
+                string testName = ArkadeTestInfoProvider.GetDisplayName(test);
+
+                try
+                {
+                    _statusEventHandler.RaiseEventOperationMessage(testName, "", OperationMessageStatus.Started);
+                    test.Test(archive);
+
+                    var errorTestResults = test.GetTestRun().Results.Where(r => r.IsError());
+                    if (errorTestResults.Any())
+                    {
+                        var message = new StringBuilder();
+
+                        foreach (var result in errorTestResults)
+                            message.AppendLine().AppendLine(result.Location + " - " + result.Message);
+
+                        _statusEventHandler.RaiseEventOperationMessage(testName, message.ToString(),
+                            OperationMessageStatus.Error);
+                    }
+                    else
+                        _statusEventHandler.RaiseEventOperationMessage(testName, "", OperationMessageStatus.Ok);
+                }
+                catch (Exception)
+                {
+                    _statusEventHandler.RaiseEventOperationMessage(testName, "", OperationMessageStatus.Error);
+                    throw;
+                }
+            }
+            return structureTests;
+        }
+
         private List<IArkadeStructureTest> RunStructureTests(Archive archive)
         {
-            List<IArkadeStructureTest> structureTests = _testProvider.GetStructureTests();
+            List<IArkadeStructureTest> structureTests = _testProvider.GetStructureTests(new List<uint>() { 1, 2, 3, 28 });
             foreach (var test in structureTests)
             {
                 string testName = ArkadeTestInfoProvider.GetDisplayName(test);

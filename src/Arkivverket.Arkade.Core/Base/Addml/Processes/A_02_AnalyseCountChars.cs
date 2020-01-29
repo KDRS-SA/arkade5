@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_02_AnalyseCountChars : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 2);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 2);
 
         public const string Name = "Analyse_CountChars";
 

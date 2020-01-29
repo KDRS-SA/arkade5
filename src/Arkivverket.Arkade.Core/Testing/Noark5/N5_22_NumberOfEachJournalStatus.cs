@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_22_NumberOfEachJournalStatus : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 22);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 22);
 
         private ArchivePart _currentArchivePart = new ArchivePart();
         private JournalPost _currentJournalPost;

@@ -11,7 +11,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_44_NumberOfDisposalResolutions : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 44);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 44);
 
         private ArchivePart _currentArchivePart = new ArchivePart();
         private List<ArchivePart> _archiveParts = new List<ArchivePart>();

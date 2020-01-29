@@ -5,9 +5,9 @@ namespace Arkivverket.Arkade.Core.Util
 {
     public class TestId : IComparable
     {
-        public readonly TestKind Kind;
-        public readonly uint Number;
-        public readonly string Version;
+        public TestKind Kind;
+        public uint Number;
+        public string Version;
 
         private static readonly Dictionary<TestKind, string> KindPrefix =
             new Dictionary<TestKind, string>

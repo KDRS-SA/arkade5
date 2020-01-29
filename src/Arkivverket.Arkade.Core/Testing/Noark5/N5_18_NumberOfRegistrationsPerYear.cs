@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_18_NumberOfRegistrationsPerYear : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 18);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 18);
 
         private N5_18_ArchivePart _currentArchivePart = new N5_18_ArchivePart();
         private readonly List<N5_18_ArchivePart> _archiveParts = new List<N5_18_ArchivePart>();

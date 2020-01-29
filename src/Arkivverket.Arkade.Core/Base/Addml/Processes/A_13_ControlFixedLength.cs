@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_13_ControlFixedLength : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 13);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 13);
 
         public const string Name = "Control_FixedLength";
 

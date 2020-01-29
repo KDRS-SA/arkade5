@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_16_NumberOfRegistrations : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 16);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 16);
         private readonly List<N5_16_ArchivePart> _archiveParts = new List<N5_16_ArchivePart>();
         private N5_16_ArchivePart _currentArchivePart = new N5_16_ArchivePart();
         private Stack<string> _registrationTypes = new Stack<string>();

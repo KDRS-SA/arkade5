@@ -10,7 +10,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes.Hardcoded
 {
     public class AH_01_ControlChecksum : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.AddmlHardcoded, 1);
+        public static readonly TestId _id = new TestId(TestId.TestKind.AddmlHardcoded, 1);
 
         public const string Name = "Control_Checksum";
 

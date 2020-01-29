@@ -8,5 +8,9 @@ namespace Arkivverket.Arkade.Core.Testing
         List<INoark5Test> GetContentTests(Archive archive);
 
         List<IArkadeStructureTest> GetStructureTests();
+
+        List<INoark5Test> GetContentTests(Archive archive, List<uint> testsToDo);
+
+        List<IArkadeStructureTest> GetStructureTests(List<uint> testsToDo);
     }
 }

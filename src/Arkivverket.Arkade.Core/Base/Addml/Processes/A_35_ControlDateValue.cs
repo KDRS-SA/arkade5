@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_35_ControlDateValue : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 35);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 35);
 
         public const string Name = "Control_Date_Value";
 

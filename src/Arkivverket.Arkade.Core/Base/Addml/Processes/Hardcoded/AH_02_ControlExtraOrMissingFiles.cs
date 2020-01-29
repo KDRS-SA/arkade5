@@ -12,7 +12,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes.Hardcoded
 {
     public class AH_02_ControlExtraOrMissingFiles : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.AddmlHardcoded, 2);
+        public static readonly TestId _id = new TestId(TestId.TestKind.AddmlHardcoded, 2);
 
         public const string Name = "Control_ExtraOrMissingFiles";
 

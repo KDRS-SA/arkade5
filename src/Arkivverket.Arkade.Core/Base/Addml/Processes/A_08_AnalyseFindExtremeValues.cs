@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_08_AnalyseFindExtremeValues : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 8);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 8);
 
         public const string Name = "Analyse_FindExtremeValues";
 

@@ -11,7 +11,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_45_NumberOfDisposalsExecuted : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 45);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 45);
 
         private readonly Dictionary<ArchivePart, int> _numberOfDisposalsExecutedPerArchivePart;
         private ArchivePart _currentArchivePart = new ArchivePart();

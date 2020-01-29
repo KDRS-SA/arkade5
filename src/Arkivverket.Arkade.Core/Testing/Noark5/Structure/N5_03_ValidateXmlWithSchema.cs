@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5.Structure
 {
     public class N5_03_ValidateXmlWithSchema : Noark5StructureBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 3);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 3);
 
         private readonly List<TestResult> _testResults = new List<TestResult>();
 

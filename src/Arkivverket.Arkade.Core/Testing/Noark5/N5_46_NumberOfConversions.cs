@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_46_NumberOfConversions : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 46);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 46);
         private ArchivePart _currentArchivePart = new ArchivePart();
         private readonly Dictionary<ArchivePart, int> _numberOfConvertionsPerArchivePart = new Dictionary<ArchivePart, int>();
 

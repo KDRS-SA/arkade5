@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_14_NumberOfFoldersWithoutRegistrationsOrSubfolders : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 14);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 14);
 
         private bool _registrationIsFound;
         private bool _subfolderIsJustProcessed;

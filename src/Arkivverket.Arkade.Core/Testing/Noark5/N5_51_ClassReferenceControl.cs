@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_51_ClassReferenceControl : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 51);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 51);
 
         private readonly List<string> _classSystemIds = new List<string>();
         private readonly Stack<Folder> _folders = new Stack<Folder>();

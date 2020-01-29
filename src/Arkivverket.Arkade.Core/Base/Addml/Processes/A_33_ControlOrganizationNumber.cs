@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_33_ControlOrganizationNumber : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 33);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 33);
 
         public const string Name = "Control_Organisationno";
 

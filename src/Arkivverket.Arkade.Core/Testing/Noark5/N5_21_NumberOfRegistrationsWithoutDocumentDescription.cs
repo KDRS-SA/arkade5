@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_21_NumberOfRegistrationsWithoutDocumentDescription : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 21);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 21);
 
         private bool _documentDescriptionIsFound;
         private readonly Dictionary<ArchivePart, int> _noDocumentDescriptionCountPerArchivepart = new Dictionary<ArchivePart, int>();

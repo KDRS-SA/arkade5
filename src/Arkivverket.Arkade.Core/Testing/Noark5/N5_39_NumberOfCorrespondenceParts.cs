@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_39_NumberOfCorrespondenceParts : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 39);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 39);
 
         private int _totalNumberOfCorrespondanceParts;
         private ArchivePart _currentArchivePart = new ArchivePart();

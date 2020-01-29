@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_07_AnalyseCountNull : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 7);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 7);
 
         public const string Name = "Analyse_CountNULL";
 

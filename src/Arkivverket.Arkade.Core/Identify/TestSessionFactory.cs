@@ -69,6 +69,13 @@ namespace Arkivverket.Arkade.Core.Identify
             var testSession = new TestSession(archive);
 
             if (archiveType == ArchiveType.Noark5)
+            {
+                testSession.TestIDs = Testing.Noark5.Noark5TestProvider.GetContentTestIds(archive);
+                testSession.TestIDs.AddRange(Testing.Noark5.Noark5TestProvider.GetStructureTestIds());
+                testSession.TestIDs.Sort();
+            }
+
+            if (archiveType == ArchiveType.Noark5)
                 return testSession;
 
             ArchiveXmlFile addmlFile = archive.AddmlXmlUnit.File;

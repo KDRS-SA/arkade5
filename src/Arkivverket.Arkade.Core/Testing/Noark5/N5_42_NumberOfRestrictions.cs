@@ -13,7 +13,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_42_NumberOfRestrictions : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 42);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 42);
 
         private ArchivePart _currentArchivePart = new ArchivePart();
         private List<ArchivePart> archiveParts = new List<ArchivePart>();

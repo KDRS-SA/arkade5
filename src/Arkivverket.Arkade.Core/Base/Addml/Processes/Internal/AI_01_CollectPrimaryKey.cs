@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes.Internal
 {
     public class AI_01_CollectPrimaryKey : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.AddmlInternal, 1);
+        public static readonly TestId _id = new TestId(TestId.TestKind.AddmlInternal, 1);
 
         public const string Name = "Collect_PrimaryKey";
 

@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_04_AnalyseCountRecordDefinitionOccurences : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 4);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 4);
 
         public const string Name = "Analyse_CountRecordDefinitionOccurences";
 

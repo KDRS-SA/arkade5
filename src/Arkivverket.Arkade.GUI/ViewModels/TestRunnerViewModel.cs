@@ -16,6 +16,7 @@ using Arkivverket.Arkade.GUI.Util;
 using Arkivverket.Arkade.GUI.Views;
 using Arkivverket.Arkade.Core.Util;
 using Application = System.Windows.Application;
+using System.Collections.Generic;
 
 namespace Arkivverket.Arkade.GUI.ViewModels
 {
@@ -24,6 +25,7 @@ namespace Arkivverket.Arkade.GUI.ViewModels
         private readonly ILogger _log = Log.ForContext<TestRunnerViewModel>();
 
         private ObservableCollection<OperationMessage> _operationMessages = new ObservableCollection<OperationMessage>();
+        private ObservableCollection<SelectableTest> _selectableTests = new ObservableCollection<SelectableTest>();
 
         private readonly ArkadeApi _arkadeApi;
         private readonly IRegionManager _regionManager;
@@ -47,12 +49,14 @@ namespace Arkivverket.Arkade.GUI.ViewModels
         private Visibility _archiveCurrentProcessing = Visibility.Hidden;
         private Visibility _addmlDataObjectStatusVisibilty = Visibility.Collapsed;
         private Visibility _addmlFlatFileStatusVisibilty = Visibility.Collapsed;
+        private bool _allTestsSelected = true;
         private int _numberOfProcessedRecords = 0;
         private int _numberOfProcessedFiles = 0;
         private string _currentlyProcessingFile;
         private string _currentActivityMessage;
         private int _numberOfTestsFinished = 0;
         private string _currentlyRunningTest;
+        private string _numberOfTestsSelected;
 
         public Visibility AddmlDataObjectStatusVisibility
         {
@@ -108,6 +112,12 @@ namespace Arkivverket.Arkade.GUI.ViewModels
             set { SetProperty(ref _operationMessages, value); }
         }
 
+        public ObservableCollection<SelectableTest> SelectableTests
+        {
+            get { return _selectableTests; }
+            set { SetProperty(ref _selectableTests, value); }
+        }
+
         public ArchiveInformationStatus ArchiveInformationStatus
         {
             get { return _archiveInformationStatus; }
@@ -120,7 +130,23 @@ namespace Arkivverket.Arkade.GUI.ViewModels
             set { SetProperty(ref _archiveCurrentProcessing, value); }
         }
 
-        public TestRunnerViewModel(ArkadeApi arkadeApi, IRegionManager regionManager,  IStatusEventHandler statusEventHandler)
+        private bool _AllOrNothingSelected;
+
+        public bool AllOrNothingSelected
+        {
+            get
+            {
+                return _AllOrNothingSelected;
+            }
+            set
+            {
+                SetProperty(ref _AllOrNothingSelected, value);
+                foreach (SelectableTest test in SelectableTests)
+                    test.Checked = value;
+            }
+        }
+
+        public TestRunnerViewModel(ArkadeApi arkadeApi, IRegionManager regionManager, IStatusEventHandler statusEventHandler)
         {
             _arkadeApi = arkadeApi;
             _regionManager = regionManager;
@@ -133,12 +159,14 @@ namespace Arkivverket.Arkade.GUI.ViewModels
             _statusEventHandler.RecordProcessingStartedEvent += OnRecordProcessingStartedEvent;
             _statusEventHandler.RecordProcessingFinishedEvent += OnRecordProcessingFinishedEvent;
             _statusEventHandler.NewArchiveProcessEvent += OnNewArchiveInformationEvent;
-            
+
             StartTestingCommand = new DelegateCommand(StartTesting, CanStartTestRun);
             RunTestEngineCommand = new DelegateCommand(async () => await Task.Run(() => RunTests()));
             NavigateToCreatePackageCommand = new DelegateCommand(NavigateToCreatePackage, CanCreatePackage);
             NewProgramSessionCommand = new DelegateCommand(ReturnToProgramStart, IsFinishedRunningTests);
             ShowReportCommand = new DelegateCommand(ShowHtmlReport, CanContinueOperationOnTestRun);
+
+            _AllOrNothingSelected = true;
         }
 
         private void StartTesting()
@@ -201,12 +229,22 @@ namespace Arkivverket.Arkade.GUI.ViewModels
         {
             try
             {
-                _archiveType = (ArchiveType) context.Parameters["archiveType"];
-                _archiveFileName = (string) context.Parameters["archiveFileName"];
+                _archiveType = (ArchiveType)context.Parameters["archiveType"];
+                _archiveFileName = (string)context.Parameters["archiveFileName"];
 
                 _testSession = Directory.Exists(_archiveFileName)
                     ? _arkadeApi.CreateTestSession(ArchiveDirectory.Read(_archiveFileName, _archiveType))
                     : _arkadeApi.CreateTestSession(ArchiveFile.Read(_archiveFileName, _archiveType));
+
+                foreach (uint testId in _testSession.TestIDs)
+                {
+                    _selectableTests.Add(new SelectableTest()
+                    {
+                        Id = testId,
+                        Checked = true,
+                        Name = "N5_" + testId.ToString("D2")
+                    });
+                }
 
                 if (!_testSession.IsTestableArchive())
                 {
@@ -280,13 +318,19 @@ namespace Arkivverket.Arkade.GUI.ViewModels
             try
             {
                 NotifyStartRunningTests();
-                
-                _arkadeApi.RunTests(_testSession);
-                
+
+                List<uint> testIds = new List<uint>();
+                foreach (SelectableTest selectableTest in SelectableTests)
+                {
+                    if (selectableTest.Checked)
+                        testIds.Add(selectableTest.Id);
+                }
+                _arkadeApi.RunTests(_testSession, testIds);
+
                 _testSession.TestSummary = new TestSummary(_numberOfProcessedFiles, _numberOfProcessedRecords, _numberOfTestsFinished);
 
                 _testSession.AddLogEntry("Test run completed.");
-                
+
                 SaveHtmlReport();
 
                 _testRunCompletedSuccessfully = true;
@@ -309,7 +353,64 @@ namespace Arkivverket.Arkade.GUI.ViewModels
 
                 if (e.GetType() == typeof(FileNotFoundException))
                 {
-                    string nameOfMissingFile = new FileInfo(((FileNotFoundException) e).FileName).Name;
+                    string nameOfMissingFile = new FileInfo(((FileNotFoundException)e).FileName).Name;
+                    operationMessageBuilder.Append(string.Format(Resources.GUI.FileNotFoundMessage, nameOfMissingFile));
+                }
+                else
+                {
+                    operationMessageBuilder.Append(e.Message);
+                }
+
+                string fileName = new DetailedExceptionMessage(e).WriteToFile();
+
+                if (!string.IsNullOrEmpty(fileName))
+                    operationMessageBuilder.AppendLine("\n" + string.Format(Resources.GUI.DetailedErrorMessageInfo, fileName));
+
+                string operationMessage = operationMessageBuilder.ToString();
+
+                _statusEventHandler.RaiseEventOperationMessage(
+                    Resources.GUI.TestrunnerFinishedWithError, operationMessage, OperationMessageStatus.Error
+                );
+
+                NotifyFinishedRunningTests();
+            }
+        }
+
+        private void RunTests(System.Collections.Generic.List<uint> testsToDo)
+        {
+            try
+            {
+                NotifyStartRunningTests();
+
+                _arkadeApi.RunTests(_testSession, testsToDo);
+
+                _testSession.TestSummary = new TestSummary(_numberOfProcessedFiles, _numberOfProcessedRecords, _numberOfTestsFinished);
+
+                _testSession.AddLogEntry("Test run completed.");
+
+                SaveHtmlReport();
+
+                _testRunCompletedSuccessfully = true;
+                _statusEventHandler.RaiseEventOperationMessage(Resources.GUI.TestrunnerFinishedOperationMessage, null, OperationMessageStatus.Ok);
+                NotifyFinishedRunningTests();
+            }
+            catch (ArkadeException e)
+            {
+                _testSession?.AddLogEntry("Test run failed: " + e.Message);
+                _log.Error(e.Message, e);
+                _statusEventHandler.RaiseEventOperationMessage(Resources.GUI.TestrunnerFinishedWithError, e.Message, OperationMessageStatus.Error);
+                NotifyFinishedRunningTests();
+            }
+            catch (Exception e)
+            {
+                _testSession?.AddLogEntry("Test run failed: " + e.Message);
+                _log.Error(e.Message, e);
+
+                var operationMessageBuilder = new StringBuilder();
+
+                if (e.GetType() == typeof(FileNotFoundException))
+                {
+                    string nameOfMissingFile = new FileInfo(((FileNotFoundException)e).FileName).Name;
                     operationMessageBuilder.Append(string.Format(Resources.GUI.FileNotFoundMessage, nameOfMissingFile));
                 }
                 else
@@ -339,7 +440,7 @@ namespace Arkivverket.Arkade.GUI.ViewModels
             ShowReportCommand.RaiseCanExecuteChanged();
             NavigateToCreatePackageCommand.RaiseCanExecuteChanged();
             NewProgramSessionCommand.RaiseCanExecuteChanged();
-            
+
         }
 
         private void NotifyStartRunningTests()
@@ -392,7 +493,7 @@ namespace Arkivverket.Arkade.GUI.ViewModels
         private void ShowHtmlReport()
         {
             _log.Information("User action: Show HTML report");
-            
+
             OpenFile(GetHtmlFile());
         }
 

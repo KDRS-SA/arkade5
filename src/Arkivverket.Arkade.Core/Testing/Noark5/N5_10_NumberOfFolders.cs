@@ -10,7 +10,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_10_NumberOfFolders : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 10);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 10);
 
         private readonly Archive _archive;
         private Stack<string> _currentFolderType = new Stack<string>();

@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_32_ControlBirthNumber : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 32);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 32);
 
         public const string Name = "Control_Birthno";
 

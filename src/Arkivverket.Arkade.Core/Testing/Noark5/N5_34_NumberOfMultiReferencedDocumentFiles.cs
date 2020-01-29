@@ -9,7 +9,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_34_NumberOfMultiReferencedDocumentFiles : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 34);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 34);
 
         private readonly List<DocumentObject> _documentObjects = new List<DocumentObject>();
         private ArchivePart _currentArchivePart = new ArchivePart();

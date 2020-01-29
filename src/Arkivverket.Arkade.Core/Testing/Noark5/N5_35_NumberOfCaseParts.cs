@@ -12,7 +12,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
         private int _totalNumberOfCaseParts;
         private Archive archive;
         private readonly Dictionary<ArchivePart, int> _casePartsPerArchivePart = new Dictionary<ArchivePart, int>();
-        private readonly TestId _id;
+        public readonly TestId _id;
 
         private string GetTestVersion()
         {

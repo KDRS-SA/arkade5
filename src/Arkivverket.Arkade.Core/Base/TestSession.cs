@@ -15,6 +15,8 @@ namespace Arkivverket.Arkade.Core.Base
 
         public TestSuite TestSuite { get; set; }
 
+        public List<uint> TestIDs { get; set; }
+
         public TestSummary TestSummary { get; set; }
 
         public AddmlDefinition AddmlDefinition { get; set; }

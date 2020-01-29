@@ -10,7 +10,7 @@ namespace Arkivverket.Arkade.Core.Testing.Noark5
 {
     public class N5_62_ChangeLogArchiveReferenceControl : Noark5XmlReaderBaseTest
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Noark5, 62);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Noark5, 62);
 
         private readonly Archive _archive;
         private readonly HashSet<string> _systemIDs;

@@ -8,7 +8,7 @@ namespace Arkivverket.Arkade.Core.Base.Addml.Processes
 {
     public class A_21_ControlUniqueness : AddmlProcess
     {
-        private readonly TestId _id = new TestId(TestId.TestKind.Addml, 21);
+        public static readonly TestId _id = new TestId(TestId.TestKind.Addml, 21);
 
         public const string Name = "Control_Uniqueness";
 

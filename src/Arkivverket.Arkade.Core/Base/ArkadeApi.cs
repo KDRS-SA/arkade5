@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Arkivverket.Arkade.Core.Identify;
 using Arkivverket.Arkade.Core.Logging;
@@ -59,6 +60,18 @@ namespace Arkivverket.Arkade.Core.Base
 
             ITestEngine testEngine = _testEngineFactory.GetTestEngine(testSession);
             testSession.TestSuite = testEngine.RunTestsOnArchive(testSession);
+
+            testSession.AddLogEntry(Messages.LogMessageFinishedTesting);
+
+            _testSessionXmlGenerator.GenerateXmlAndSaveToFile(testSession);
+        }
+
+        public void RunTests(TestSession testSession, List<uint> testsToDo)
+        {
+            testSession.AddLogEntry(Messages.LogMessageStartTesting);
+
+            ITestEngine testEngine = _testEngineFactory.GetTestEngine(testSession);
+            testSession.TestSuite = testEngine.RunTestsOnArchive(testSession, testsToDo);
 
             testSession.AddLogEntry(Messages.LogMessageFinishedTesting);
 
