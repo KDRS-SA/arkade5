@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 // TeamCity will set the version numbers
-[assembly: AssemblyVersion("0.0.0.0")]
-[assembly: AssemblyFileVersion("0.0.0.0")]
+[assembly: AssemblyVersion("1.1.1")]
+[assembly: AssemblyFileVersion("2.2.2")]

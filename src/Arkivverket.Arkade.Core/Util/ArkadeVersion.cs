@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using Serilog;
 
@@ -19,7 +20,27 @@ namespace Arkivverket.Arkade.Core.Util
 
         public static Version GetCurrent()
         {
-            return Assembly.GetExecutingAssembly().GetName().Version;
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            AssemblyName assemblyName = assembly.GetName();
+
+            Version version = assemblyName.Version;
+
+            // -----------
+
+            string assemblyLocation = assembly.Location;
+
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assemblyLocation);
+
+            string productVersion = fileVersionInfo.ProductVersion;
+            
+            var current = new Version(productVersion);
+
+            // -----------
+
+            return current;
+            
+            return new Version(version.Major, version.Minor, version.Build);
         }
 
         public Version GetLatest()
