@@ -7,7 +7,7 @@ namespace Arkivverket.Arkade.CLI
     /// <summary>
     ///     Using CommandLine library for parsing options. See https://github.com/gsscoder/commandline/wiki/
     /// </summary>
-    internal class CommandLineOptions
+    public class CommandLineOptions
     {
         [Option('a', "archive", HelpText = "Archive directory or file (.tar) to process.")]
         public string Archive { get; set; }
