@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Arkivverket.Arkade.Core.Base;
 using Arkivverket.Arkade.Core.Util;
 using CommandLine;
+using RestSharp.Extensions;
 using Serilog;
 
 namespace Arkivverket.Arkade.CLI
@@ -16,12 +17,34 @@ namespace Arkivverket.Arkade.CLI
 
             ConfigureLogging(); // Configured with temporary log directory
 
-            Parser.Default.ParseArguments<CommandLineOptions>(args)
-                .WithParsed(RunOptionsAndReturnExitCode)
+            ParseArguments(args)
+                .WithParsed<ProcessOptions>(RunOptionsAndReturnExitCode)
+                .WithParsed<MetadataOptions>(RunMetadataOptionsAndReturnExitCode)
                 .WithNotParsed(HandleParseError);
         }
 
-        private static void RunOptionsAndReturnExitCode(CommandLineOptions options)
+        public static ParserResult<object> ParseArguments(IEnumerable<string> args)
+        {
+            return Parser.Default.ParseArguments<ProcessOptions, MetadataOptions>(args);
+        }
+
+        private static void RunOptionsAndReturnExitCode(ProcessOptions options)
+        {
+            ArkadeProcessingArea.Establish(options.ProcessingArea); // Removes temporary log directory
+
+            ConfigureLogging(); // Re-configured with log directory within processing area
+
+                if (ValidArgumentsForTesting(options))
+                {
+                    new CommandLineRunner().Run(options);
+                }
+                else
+                {
+                    Console.WriteLine(options.GetUsage());
+                }
+        }
+
+        private static void RunMetadataOptionsAndReturnExitCode(MetadataOptions options)
         {
             ArkadeProcessingArea.Establish(options.ProcessingArea); // Removes temporary log directory
 
@@ -31,17 +54,6 @@ namespace Arkivverket.Arkade.CLI
             {
                 new MetadataExampleGenerator().Generate(options.GenerateMetadataExample);
             }
-            else
-            {
-                if (ValidArgumentsForTesting(options))
-                {
-                    new CommandLineRunner().Run(options);
-                }
-                else
-                {
-                    Console.WriteLine(options.GetUsage());
-                }
-            }
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)
@@ -50,12 +62,12 @@ namespace Arkivverket.Arkade.CLI
                 Log.Error(error.ToString());
         }
 
-        private static bool ValidArgumentsForMetadataCreation(CommandLineOptions options)
+        private static bool ValidArgumentsForMetadataCreation(MetadataOptions options)
         {
             return !string.IsNullOrWhiteSpace(options.GenerateMetadataExample);
         }
 
-        private static bool ValidArgumentsForTesting(CommandLineOptions options)
+        private static bool ValidArgumentsForTesting(ProcessOptions options)
         {
             return !string.IsNullOrWhiteSpace(options.Archive)
                    && !string.IsNullOrWhiteSpace(options.ArchiveType)

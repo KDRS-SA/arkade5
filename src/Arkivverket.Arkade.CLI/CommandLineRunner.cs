@@ -13,7 +13,7 @@ namespace Arkivverket.Arkade.CLI
     {
         private static readonly ILogger Log = Serilog.Log.ForContext(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void Run(CommandLineOptions options)
+        public void Run(ProcessOptions options)
         {
             try
             {
@@ -76,17 +76,17 @@ namespace Arkivverket.Arkade.CLI
             }
         }
 
-        private static bool TestingIsSkipped(CommandLineOptions options)
+        private static bool TestingIsSkipped(ProcessOptions options)
         {
             return options.Skip.HasValue() && options.Skip.Equals("testing");
         }
 
-        private static bool PackingIsSkipped(CommandLineOptions options)
+        private static bool PackingIsSkipped(ProcessOptions options)
         {
             return options.Skip.HasValue() && options.Skip.Equals("packing");
         }
 
-        private static TestSession CreateTestSession(CommandLineOptions options, Core.Base.Arkade arkade, ArchiveType archiveType)
+        private static TestSession CreateTestSession(ProcessOptions options, Core.Base.Arkade arkade, ArchiveType archiveType)
         {
             TestSession testSession;
             if (File.Exists(options.Archive))
@@ -106,7 +106,7 @@ namespace Arkivverket.Arkade.CLI
             return testSession;
         }
 
-        private static void SaveTestReport(Core.Base.Arkade arkade, TestSession testSession, CommandLineOptions options)
+        private static void SaveTestReport(Core.Base.Arkade arkade, TestSession testSession, ProcessOptions options)
         {
             var packageTestReport = new FileInfo(Path.Combine(
                 testSession.GetReportDirectory().FullName, "report.html"
