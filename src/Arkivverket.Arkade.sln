@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arkivverket.Arkade.CLI", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arkivverket.Arkade.CLI.Tests", "Arkivverket.Arkade.CLI.Tests\Arkivverket.Arkade.CLI.Tests.csproj", "{A9D00B2A-35EB-40C1-BF87-88E5BAB2440F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arkivverket.Arkade.GUI", "Arkivverket.Arkade.GUI\Arkivverket.Arkade.GUI.csproj", "{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,14 @@ Global
 		{A9D00B2A-35EB-40C1-BF87-88E5BAB2440F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A9D00B2A-35EB-40C1-BF87-88E5BAB2440F}.Release|x86.ActiveCfg = Release|Any CPU
 		{A9D00B2A-35EB-40C1-BF87-88E5BAB2440F}.Release|x86.Build.0 = Release|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Debug|x86.Build.0 = Debug|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDB8A18F-7E0B-4534-9AB0-C704096DE7AD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
